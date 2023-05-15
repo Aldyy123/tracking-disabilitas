@@ -39,20 +39,26 @@ const Maps = ({coordinate}: Props) => {
   };
   const closeEditCoordinate = () => {
     setIsAddCoordinate(false);
-    // setPointCoordinate([]);
+    setPointCoordinate([]);
+  };
+
+  const completeEditCoordinate = () => {
+    setIsAddCoordinate(false);
   };
 
   const clearPointMap = () => {
     setPointCoordinate([]);
   };
 
-  const settingCoordinateZones = (feature: any) => {
+  const settingCoordinateZones = (feature: GeoJSON.Feature) => {
     if (!isAddCoordinate) {
       return;
     }
-    const arrayFirst = [...pointCoordinate];
-    arrayFirst.push(feature.geometry.coordinates);
-    setPointCoordinate(arrayFirst);
+    if (feature.geometry.type === 'Point') {
+      const arrayFirst = [...pointCoordinate];
+      arrayFirst.push(feature.geometry.coordinates);
+      setPointCoordinate(arrayFirst);
+    }
   };
 
   return (
@@ -62,7 +68,7 @@ const Maps = ({coordinate}: Props) => {
         projection="globe"
         compassEnabled
         style={styles.map}
-        onPress={e => settingCoordinateZones(e)}
+        onPress={settingCoordinateZones}
         logoEnabled={false}>
         <Mapbox.Camera ref={cameraViewRef} zoomLevel={13} />
         <Mapbox.PointAnnotation id="user" coordinate={coordinate}>
@@ -112,7 +118,7 @@ const Maps = ({coordinate}: Props) => {
             />
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={backIntialCoordinate}
+            onPress={completeEditCoordinate}
             style={{...styles.btnOverlay, ...styles.btnOverlayRight}}>
             <MaterialCommunityIcons name="check" size={30} color="blue" />
           </TouchableOpacity>
