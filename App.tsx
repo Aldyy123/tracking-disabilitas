@@ -18,6 +18,8 @@ import StatusScreen from './src/Screens/StatusScreen';
 import TrackerScreen from './src/Screens/Tracker';
 import {useTheme} from 'react-native-paper';
 import {Provider as PaperProvider} from 'react-native-paper';
+import {Provider as ReduxProvider} from 'react-redux';
+import store from './src/config/store';
 
 function App(): JSX.Element {
   const theme = useTheme();
@@ -33,61 +35,71 @@ function App(): JSX.Element {
 
   return (
     <>
-      <PaperProvider>
-        <NavigationContainer independent>
-          <Tab.Navigator
-            initialRouteName="Tracker"
-            activeColor="#E8F6EF"
-            inactiveColor="#B0DAFF"
-            barStyle={{backgroundColor: '#0C134F', padding: 0}}>
-            <Tab.Screen
-              name="Tracker"
-              options={{
-                tabBarIcon: ({color}) => (
-                  <MaterialCommunityIcons
-                    name="eight-track"
-                    color={color}
-                    size={27}
-                  />
-                ),
-              }}
-              component={TrackerScreen}
-            />
-            <Tab.Screen
-              name="Status"
-              options={{
-                tabBarIcon: ({color}) => (
-                  <MaterialCommunityIcons
-                    name="information"
-                    color={color}
-                    size={27}
-                  />
-                ),
-              }}
-              component={StatusScreen}
-            />
-            <Tab.Screen
-              name="Notification"
-              options={{
-                tabBarIcon: ({color}) => (
-                  <MaterialCommunityIcons name="bell" color={color} size={27} />
-                ),
-                tabBarBadge: 3,
-              }}
-              component={NotificationScreen}
-            />
-            <Tab.Screen
-              name="Settings"
-              options={{
-                tabBarIcon: ({color}) => (
-                  <MaterialCommunityIcons name="cog" color={color} size={27} />
-                ),
-              }}
-              component={SettingsScreen}
-            />
-          </Tab.Navigator>
-        </NavigationContainer>
-      </PaperProvider>
+      <ReduxProvider store={store}>
+        <PaperProvider>
+          <NavigationContainer independent>
+            <Tab.Navigator
+              initialRouteName="Tracker"
+              activeColor="#E8F6EF"
+              inactiveColor="#B0DAFF"
+              barStyle={{backgroundColor: '#0C134F', padding: 0}}>
+              <Tab.Screen
+                name="Tracker"
+                options={{
+                  tabBarIcon: ({color}) => (
+                    <MaterialCommunityIcons
+                      name="eight-track"
+                      color={color}
+                      size={27}
+                    />
+                  ),
+                }}
+                component={TrackerScreen}
+              />
+              <Tab.Screen
+                name="Status"
+                options={{
+                  tabBarIcon: ({color}) => (
+                    <MaterialCommunityIcons
+                      name="information"
+                      color={color}
+                      size={27}
+                    />
+                  ),
+                }}
+                component={StatusScreen}
+              />
+              <Tab.Screen
+                name="Notification"
+                options={{
+                  tabBarIcon: ({color}) => (
+                    <MaterialCommunityIcons
+                      name="bell"
+                      color={color}
+                      size={27}
+                    />
+                  ),
+                  tabBarBadge: 3,
+                }}
+                component={NotificationScreen}
+              />
+              <Tab.Screen
+                name="Settings"
+                options={{
+                  tabBarIcon: ({color}) => (
+                    <MaterialCommunityIcons
+                      name="cog"
+                      color={color}
+                      size={27}
+                    />
+                  ),
+                }}
+                component={SettingsScreen}
+              />
+            </Tab.Navigator>
+          </NavigationContainer>
+        </PaperProvider>
+      </ReduxProvider>
     </>
   );
 }
