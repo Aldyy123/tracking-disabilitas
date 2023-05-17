@@ -1,15 +1,27 @@
 import Mapbox from '@rnmapbox/maps';
-import React, {memo} from 'react';
+import React, {memo, useEffect} from 'react';
 import styles from '../styles';
+import * as turf from '@turf/turf';
 
 interface Props {
   zones: number[][];
+  coordinate: number[];
 }
-function MappingUser({zones}: Props) {
-  console.log(zones);
+function MappingUser({zones, coordinate}: Props) {
   if (zones?.length < 4) {
     return null;
   }
+  const melihat = () => {
+    const points = turf.point(coordinate);
+    const zonesPolygon = [...zones, zones[0]];
+
+    const searchWithin = turf.polygon([zonesPolygon]);
+    const ptsWithin = turf.pointsWithinPolygon(points, searchWithin);
+    console.log(ptsWithin);
+  };
+  useEffect(() => {
+    melihat();
+  }, []);
   return (
     <>
       <Mapbox.ShapeSource

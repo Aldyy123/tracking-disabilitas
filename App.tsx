@@ -11,7 +11,11 @@ import {onDisplayNotification} from './src/providers/Notification';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 const Tab = createMaterialBottomTabNavigator();
-import {NavigationContainer} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  DefaultTheme,
+  DarkTheme,
+} from '@react-navigation/native';
 import SettingsScreen from './src/Screens/SettingsScreen';
 import NotificationScreen from './src/Screens/NotificationScreen';
 import StatusScreen from './src/Screens/StatusScreen';
@@ -20,9 +24,11 @@ import {useTheme} from 'react-native-paper';
 import {Provider as PaperProvider} from 'react-native-paper';
 import {Provider as ReduxProvider} from 'react-redux';
 import store from './src/config/store';
+import {useColorScheme} from 'react-native';
 
 function App(): JSX.Element {
   const theme = useTheme();
+  const scheme = useColorScheme();
   theme.colors.secondaryContainer = 'transperent';
   useEffect(() => {
     const unsubscribe = messaging().onMessage(remoteMessage => {
@@ -37,7 +43,9 @@ function App(): JSX.Element {
     <>
       <ReduxProvider store={store}>
         <PaperProvider>
-          <NavigationContainer independent>
+          <NavigationContainer
+            theme={scheme === 'dark' ? DarkTheme : DefaultTheme}
+            independent>
             <Tab.Navigator
               initialRouteName="Tracker"
               activeColor="#E8F6EF"

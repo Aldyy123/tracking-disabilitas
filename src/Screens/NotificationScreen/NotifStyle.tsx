@@ -6,7 +6,8 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     marginVertical: 5,
-    marginHorizontal: 2,
+    marginHorizontal: 10,
+    backgroundColor: '#FFFAF4'
   },
 });
 

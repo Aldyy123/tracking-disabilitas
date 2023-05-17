@@ -1,6 +1,12 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import Mapbox from '@rnmapbox/maps';
-import {Text, TouchableOpacity, View, useWindowDimensions} from 'react-native';
+import {
+  Text,
+  TouchableOpacity,
+  View,
+  useWindowDimensions,
+  Alert,
+} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MappingUser from './MappingUser';
 import Zones from './Zones';
@@ -43,6 +49,14 @@ const Maps = ({coordinate}: Props) => {
   };
 
   const completeEditCoordinate = () => {
+    if (pointCoordinate.length < 4) {
+      return Alert.alert('Warning', 'Zona tidak boleh kurang dari 4 titik', [
+        {
+          text: 'OK',
+          onPress: () => {},
+        },
+      ]);
+    }
     setIsAddCoordinate(false);
   };
 
@@ -65,22 +79,23 @@ const Maps = ({coordinate}: Props) => {
     <>
       <Mapbox.MapView
         attributionEnabled={false}
-        projection="globe"
         compassEnabled
         style={styles.map}
         onPress={settingCoordinateZones}
         logoEnabled={false}>
         <Mapbox.Camera ref={cameraViewRef} zoomLevel={13} />
-        <Mapbox.PointAnnotation id="user" coordinate={coordinate}>
-          <MaterialCommunityIcons name="map-marker" size={30} color="#900" />
-          {/* <Text>1</Text> */}
-          {/* <MaterialCommunityIcons name="account" size={30} color="#900" /> */}
-          <Mapbox.Callout title="User" id="user" />
-        </Mapbox.PointAnnotation>
+        {coordinate?.[0] && coordinate?.[1] && (
+          <Mapbox.PointAnnotation id="user" coordinate={coordinate}>
+            <MaterialCommunityIcons name="map-marker" size={30} color="#900" />
+            {/* <Text>1</Text> */}
+            {/* <MaterialCommunityIcons name="account" size={30} color="#900" /> */}
+            <Mapbox.Callout title="User" id="user" />
+          </Mapbox.PointAnnotation>
+        )}
         {isAddCoordinate ? (
           <Zones zones={pointCoordinate} />
         ) : (
-          <MappingUser zones={pointCoordinate} />
+          <MappingUser zones={pointCoordinate} coordinate={coordinate} />
         )}
       </Mapbox.MapView>
       {isAddCoordinate ? (

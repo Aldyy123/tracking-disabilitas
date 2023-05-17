@@ -3,7 +3,9 @@ import {memo, useEffect, useState} from 'react';
 import Maps from './Component/Map';
 
 function TrackerScreen() {
-  const [initalCoordinate, setInitalCoordinate] = useState<number[]>([0, 0]);
+  const [initalCoordinate, setInitalCoordinate] = useState<number[]>([
+    109.12188833333333, -6.8836216666666665,
+  ]);
 
   useEffect(() => {
     const idGeolocation = Geolocation.watchPosition(
