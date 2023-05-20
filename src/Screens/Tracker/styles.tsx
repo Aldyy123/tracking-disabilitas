@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     lineWidth: 2,
   } as any,
   pointContainerUser: {
-    backgroundColor: 'blue',
+    backgroundColor: '#2F58CD',
     borderRadius: 50,
     padding: 5,
   },

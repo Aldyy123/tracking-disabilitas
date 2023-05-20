@@ -14,22 +14,31 @@ const Tab = createMaterialBottomTabNavigator();
 import {
   NavigationContainer,
   DefaultTheme,
-  DarkTheme,
+  DarkTheme as ReactNavigationDarkTheme,
 } from '@react-navigation/native';
 import SettingsScreen from './src/Screens/SettingsScreen';
 import NotificationScreen from './src/Screens/NotificationScreen';
-import StatusScreen from './src/Screens/StatusScreen';
+import StatusScreen from './src/Screens/StatusScreen/StatusScreen';
 import TrackerScreen from './src/Screens/Tracker';
-import {useTheme} from 'react-native-paper';
+import {
+  adaptNavigationTheme,
+  useTheme,
+  MD3DarkTheme,
+  MD3LightTheme,
+} from 'react-native-paper';
 import {Provider as PaperProvider} from 'react-native-paper';
 import {Provider as ReduxProvider} from 'react-redux';
 import store from './src/config/store';
-import {useColorScheme} from 'react-native';
-
+import {Alert, useColorScheme} from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
+import {DefaultDarkTheme, defaultLightTheme} from './src/theme';
+const {DarkTheme, LightTheme} = adaptNavigationTheme({
+  reactNavigationLight: DefaultTheme,
+  reactNavigationDark: ReactNavigationDarkTheme,
+});
 function App(): JSX.Element {
-  const theme = useTheme();
   const scheme = useColorScheme();
-  theme.colors.secondaryContainer = 'transperent';
+  const theme = useTheme();
   useEffect(() => {
     const unsubscribe = messaging().onMessage(remoteMessage => {
       console.log('Message handled in the foreground!', remoteMessage);
@@ -39,18 +48,30 @@ function App(): JSX.Element {
     return unsubscribe;
   }, []);
 
+  useEffect(() => {
+    const internetInfo = NetInfo.addEventListener(state => {
+      if (!state.isConnected) {
+        Alert.alert('Internet', 'Internet tidak terhubung');
+      }
+    });
+
+    return internetInfo;
+  }, []);
+  console.log(theme.dark);
+
   return (
     <>
       <ReduxProvider store={store}>
-        <PaperProvider>
+        <PaperProvider
+          theme={scheme === 'dark' ? DefaultDarkTheme : defaultLightTheme}>
           <NavigationContainer
-            theme={scheme === 'dark' ? DarkTheme : DefaultTheme}
+            theme={scheme === 'dark' ? DarkTheme : LightTheme}
             independent>
             <Tab.Navigator
               initialRouteName="Tracker"
               activeColor="#E8F6EF"
               inactiveColor="#B0DAFF"
-              barStyle={{backgroundColor: '#0C134F', padding: 0}}>
+              barStyle={{backgroundColor: '#0C134F'}}>
               <Tab.Screen
                 name="Tracker"
                 options={{
@@ -58,7 +79,7 @@ function App(): JSX.Element {
                     <MaterialCommunityIcons
                       name="eight-track"
                       color={color}
-                      size={27}
+                      size={24}
                     />
                   ),
                 }}
@@ -71,7 +92,7 @@ function App(): JSX.Element {
                     <MaterialCommunityIcons
                       name="information"
                       color={color}
-                      size={27}
+                      size={24}
                     />
                   ),
                 }}
@@ -84,14 +105,14 @@ function App(): JSX.Element {
                     <MaterialCommunityIcons
                       name="bell"
                       color={color}
-                      size={27}
+                      size={24}
                     />
                   ),
                   tabBarBadge: 3,
                 }}
                 component={NotificationScreen}
               />
-              <Tab.Screen
+              {/* <Tab.Screen
                 name="Settings"
                 options={{
                   tabBarIcon: ({color}) => (
@@ -103,7 +124,7 @@ function App(): JSX.Element {
                   ),
                 }}
                 component={SettingsScreen}
-              />
+              /> */}
             </Tab.Navigator>
           </NavigationContainer>
         </PaperProvider>

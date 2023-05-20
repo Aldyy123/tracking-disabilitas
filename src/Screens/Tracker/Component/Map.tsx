@@ -84,14 +84,19 @@ const Maps = ({coordinate}: Props) => {
         onPress={settingCoordinateZones}
         logoEnabled={false}>
         <Mapbox.Camera ref={cameraViewRef} zoomLevel={13} />
-        {coordinate?.[0] && coordinate?.[1] && (
-          <Mapbox.PointAnnotation id="user" coordinate={coordinate}>
-            <MaterialCommunityIcons name="map-marker" size={30} color="#900" />
-            {/* <Text>1</Text> */}
-            {/* <MaterialCommunityIcons name="account" size={30} color="#900" /> */}
-            <Mapbox.Callout title="User" id="user" />
-          </Mapbox.PointAnnotation>
-        )}
+        {coordinate?.[0] !== 109.12188833333333 &&
+          coordinate?.[1] !== -6.8836216666666665 && (
+            <Mapbox.PointAnnotation id="user" coordinate={coordinate}>
+              <MaterialCommunityIcons
+                name="map-marker"
+                size={30}
+                color="#D21312"
+              />
+              {/* <Text>1</Text> */}
+              {/* <MaterialCommunityIcons name="account" size={30} color="#900" /> */}
+              <Mapbox.Callout title="User" id="user" />
+            </Mapbox.PointAnnotation>
+          )}
         {isAddCoordinate ? (
           <Zones zones={pointCoordinate} />
         ) : (

@@ -8,7 +8,6 @@ interface Props {
   zones: number[][];
 }
 function Zones({zones}: Props) {
-  console.log(zones);
   return (
     <>
       {zones.length > 0 &&

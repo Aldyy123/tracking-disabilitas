@@ -17,8 +17,8 @@ function TrackerScreen() {
       },
       err => console.log(err),
       {
-        maximumAge: 5000,
-        interval: 10000,
+        maximumAge: 1000,
+        interval: 3000,
         enableHighAccuracy: true,
       },
     );
