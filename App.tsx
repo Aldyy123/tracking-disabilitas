@@ -98,7 +98,7 @@ function App(): JSX.Element {
                 }}
                 component={StatusScreen}
               />
-              <Tab.Screen
+              {/* <Tab.Screen
                 name="Notification"
                 options={{
                   tabBarIcon: ({color}) => (
@@ -111,7 +111,7 @@ function App(): JSX.Element {
                   tabBarBadge: 3,
                 }}
                 component={NotificationScreen}
-              />
+              /> */}
               {/* <Tab.Screen
                 name="Settings"
                 options={{

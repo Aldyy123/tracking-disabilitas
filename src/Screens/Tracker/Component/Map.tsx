@@ -13,6 +13,7 @@ import Zones from './Zones';
 import styles from '../styles';
 import {fetchMapData} from '../../../config/actions/map';
 import {useAppDispatch} from '../../../Hooks/hooks';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 Mapbox.setWellKnownTileServer('Mapbox');
 Mapbox.setAccessToken(
@@ -34,6 +35,11 @@ const Maps = ({coordinate}: Props) => {
       centerCoordinate: coordinate,
       zoomLevel: 13,
     });
+    AsyncStorage.getItem('zones').then(res => {
+      if (res) {
+        setPointCoordinate(JSON.parse(res));
+      }
+    });
   }, []);
 
   const backIntialCoordinate = useCallback(async () => {
@@ -50,12 +56,13 @@ const Maps = ({coordinate}: Props) => {
   const openEditCoordinate = () => {
     setIsAddCoordinate(true);
   };
-  const closeEditCoordinate = () => {
+  const closeEditCoordinate = async () => {
     setIsAddCoordinate(false);
     setPointCoordinate([]);
+    await AsyncStorage.clear();
   };
 
-  const completeEditCoordinate = () => {
+  const completeEditCoordinate = async () => {
     if (pointCoordinate.length < 4) {
       return Alert.alert('Warning', 'Zona tidak boleh kurang dari 4 titik', [
         {
@@ -64,10 +71,11 @@ const Maps = ({coordinate}: Props) => {
         },
       ]);
     }
+    await AsyncStorage.setItem('zones', JSON.stringify(pointCoordinate));
     setIsAddCoordinate(false);
   };
 
-  const clearPointMap = () => {
+  const clearPointMap = async () => {
     setPointCoordinate([]);
   };
 
