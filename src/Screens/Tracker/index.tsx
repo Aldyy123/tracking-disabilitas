@@ -1,30 +1,27 @@
-import Geolocation from '@react-native-community/geolocation';
-import {memo, useEffect, useState} from 'react';
+import React, {memo, useEffect, useState} from 'react';
 import Maps from './Component/Map';
+import {useAppDispatch} from '../../Hooks/hooks';
+import {fetchMapData} from '../../config/actions/map';
 
 function TrackerScreen() {
+  const dispatch = useAppDispatch();
   const [initalCoordinate, setInitalCoordinate] = useState<number[]>([
     109.12188833333333, -6.8836216666666665,
   ]);
 
+  const getMapDataDevice = async () => {
+    try {
+      const result = await dispatch(fetchMapData());
+      setInitalCoordinate([result.payload.data.lng, result.payload.data.alt]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    const idGeolocation = Geolocation.watchPosition(
-      position => {
-        setInitalCoordinate([
-          position.coords.longitude,
-          position.coords.latitude,
-        ]);
-      },
-      err => console.log(err),
-      {
-        maximumAge: 1000,
-        interval: 3000,
-        enableHighAccuracy: true,
-      },
-    );
-    return () => {
-      Geolocation.clearWatch(idGeolocation);
-    };
+    setInterval(() => {
+      getMapDataDevice();
+    }, 5000);
   }, []);
 
   return (

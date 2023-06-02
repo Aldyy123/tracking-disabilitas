@@ -1,20 +1,46 @@
-import React, {memo} from 'react';
+import React, {memo, useEffect, useState} from 'react';
 import {Avatar, Card, Text} from 'react-native-paper';
 import {SafeAreaView, ScrollView} from 'react-native';
 import StylesNotif from './NotifStyle';
+import {useAppDispatch} from '../../Hooks/hooks';
+import {getNotification} from '../../config/actions/notification';
+
+interface DataNotif {
+  id: number;
+  title: string;
+  body: string;
+  type: string;
+}
 
 function NotificationScreen(): JSX.Element {
   const styles = StylesNotif();
+  const dispatch = useAppDispatch();
+  const [dataNotification, setDataNotification] = useState<DataNotif[]>([]);
+
+  const getDataNotification = async () => {
+    try {
+      const result = await dispatch(getNotification());
+      const data = result.payload.data;
+      setDataNotification(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getDataNotification();
+  }, []);
+
   return (
     <>
       <SafeAreaView>
         <ScrollView>
-          {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map(index => (
-            <Card style={styles.cardContainer} key={index}>
+          {dataNotification.map(data => (
+            <Card style={styles.cardContainer} key={data.id}>
               <Card.Title
                 subtitleStyle={styles.textStyle}
                 titleStyle={styles.textStyle}
-                title="Alert"
+                title={data.title}
                 subtitle="3 menit yg lalu"
                 left={props => (
                   <Avatar.Icon
@@ -27,7 +53,7 @@ function NotificationScreen(): JSX.Element {
               />
               <Card.Content>
                 <Text style={styles.textStyle} variant="bodyMedium">
-                  Card content
+                  {data.body}
                 </Text>
               </Card.Content>
             </Card>

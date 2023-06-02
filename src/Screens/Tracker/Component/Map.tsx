@@ -11,6 +11,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import MappingUser from './MappingUser';
 import Zones from './Zones';
 import styles from '../styles';
+import {fetchMapData} from '../../../config/actions/map';
+import {useAppDispatch} from '../../../Hooks/hooks';
 
 Mapbox.setWellKnownTileServer('Mapbox');
 Mapbox.setAccessToken(
@@ -25,20 +27,25 @@ const Maps = ({coordinate}: Props) => {
   const [pointCoordinate, setPointCoordinate] = useState<number[][]>([]);
   const [isAddCoordinate, setIsAddCoordinate] = useState(false);
   const dimensions = useWindowDimensions();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     cameraViewRef.current?.setCamera({
       centerCoordinate: coordinate,
       zoomLevel: 13,
     });
-  }, [coordinate]);
+  }, []);
 
-  const backIntialCoordinate = useCallback(() => {
+  const backIntialCoordinate = useCallback(async () => {
+    const locationRightNow = await dispatch(fetchMapData());
     cameraViewRef.current?.setCamera({
-      centerCoordinate: coordinate,
+      centerCoordinate: [
+        locationRightNow.payload.data.lng,
+        locationRightNow.payload.data.alt,
+      ],
       zoomLevel: 13,
     });
-  }, [coordinate]);
+  }, [dispatch]);
 
   const openEditCoordinate = () => {
     setIsAddCoordinate(true);
