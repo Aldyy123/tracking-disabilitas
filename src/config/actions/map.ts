@@ -15,4 +15,21 @@ const fetchMapData = createAsyncThunk('map/fetchMapData', async () => {
   }
 });
 
-export {fetchMapData};
+const updateController = createAsyncThunk(
+  'map/updateController',
+  async ({ult}: any) => {
+    try {
+      const response = await axios.put(
+        'https://midstd.com/api/public/api/controller/252525',
+        {
+          ult,
+        },
+      );
+      return response.data;
+    } catch (error) {
+      return error;
+    }
+  },
+);
+
+export {fetchMapData, updateController};

@@ -2,29 +2,59 @@ import React from 'react';
 import {memo} from 'react';
 import {View, TouchableOpacity} from 'react-native';
 import {Divider, Text} from 'react-native-paper';
-import {useAppSelector} from '../../Hooks/hooks';
+import {useAppDispatch, useAppSelector} from '../../Hooks/hooks';
 import useStyle from './style';
+import {updateController} from '../../config/actions/map';
 
 function StatusScreen() {
   const statusValue = useAppSelector(state => state.status);
   const styles = useStyle();
+  const dispatch = useAppDispatch();
+
+  const pressButton = async () => {
+    try {
+      await dispatch(updateController({ult: 1}));
+      setTimeout(async () => {
+        await dispatch(updateController({ult: 0}));
+      }, 15000);
+    } catch (error) {
+      return error;
+    }
+  };
   return (
     <>
       <View style={styles.container}>
-        <View
+        <TouchableOpacity
+          onPress={() => pressButton()}
           style={{
             ...styles.circleInfo,
             ...styles.shadowContainer,
           }}>
-          <Text style={styles.textInfo}>Tidak terhubung</Text>
-        </View>
-        <View
+          <Text style={styles.textInfo}>Tongkat Bantu</Text>
+        </TouchableOpacity>
+        {/* <View
           style={{
             marginTop: 20,
           }}>
-          <TouchableOpacity style={styles.buttonConnect}>
-            <Text style={styles.textBtn}>Hubungkan</Text>
+          <TouchableOpacity
+            style={styles.buttonConnect}
+            onPress={() => pressButton()}>
+            <Text style={styles.textBtn}>Mencari Perangkat</Text>
           </TouchableOpacity>
+        </View> */}
+        <View
+          style={{
+            marginTop: 20,
+            marginHorizontal: 20,
+          }}>
+          <Text
+            style={{
+              fontSize: 15,
+              textAlign: 'center',
+            }}>
+            Ini adalah aplikasi tongkat yang dibuat untuk membantu teman kita
+            yang memiliki keterbatasan khusus (Tuna netra)
+          </Text>
         </View>
       </View>
       <Divider style={styles.divideStyle} />
