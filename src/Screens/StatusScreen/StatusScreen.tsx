@@ -13,10 +13,11 @@ function StatusScreen() {
 
   const pressButton = async () => {
     try {
+      const oneMinutes = 60000;
       await dispatch(updateController({ult: 1}));
       setTimeout(async () => {
         await dispatch(updateController({ult: 0}));
-      }, 15000);
+      }, oneMinutes);
     } catch (error) {
       return error;
     }
@@ -52,7 +53,7 @@ function StatusScreen() {
               fontSize: 15,
               textAlign: 'center',
             }}>
-            Ini adalah aplikasi tongkat yang dibuat untuk membantu teman kita
+            Ini adalah aplikasi tongkat yang dibuat untuk membantu saudara kita
             yang memiliki keterbatasan khusus (Tuna netra)
           </Text>
         </View>

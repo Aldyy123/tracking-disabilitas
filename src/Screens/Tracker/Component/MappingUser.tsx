@@ -24,8 +24,8 @@ function MappingUser({zones, coordinate}: Props) {
     try {
       const data = {
         notification: {
-          title: 'You are in the zone',
-          body: 'You are in the zone',
+          title: 'Peringatan!',
+          body: 'Perangkat diluar zona yang ditentukan',
         },
         data: {},
         to: token,

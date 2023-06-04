@@ -57,7 +57,6 @@ function App(): JSX.Element {
 
     return internetInfo;
   }, []);
-  console.log(theme.dark);
 
   return (
     <>

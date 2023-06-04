@@ -19,6 +19,7 @@ function TrackerScreen() {
   };
 
   useEffect(() => {
+    getMapDataDevice();
     setInterval(() => {
       getMapDataDevice();
     }, 5000);
