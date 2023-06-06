@@ -22,8 +22,9 @@ Mapbox.setAccessToken(
 
 interface Props {
   coordinate: number[];
+  coordinateHandphone: number[];
 }
-const Maps = ({coordinate}: Props) => {
+const Maps = ({coordinate, coordinateHandphone}: Props) => {
   const cameraViewRef = useRef<Mapbox.Camera>(null);
   const [pointCoordinate, setPointCoordinate] = useState<number[][]>([]);
   const [isAddCoordinate, setIsAddCoordinate] = useState(false);
@@ -44,14 +45,19 @@ const Maps = ({coordinate}: Props) => {
 
   const backIntialCoordinate = useCallback(async () => {
     const locationRightNow = await dispatch(fetchMapData());
-    cameraViewRef.current?.setCamera({
-      centerCoordinate: [
-        locationRightNow.payload.data.lng,
-        locationRightNow.payload.data.alt,
-      ],
-      zoomLevel: 13,
-    });
-  }, [dispatch]);
+    // cameraViewRef.current?.setCamera({
+    //   centerCoordinate: [
+    //     locationRightNow.payload.data.lng,
+    //     locationRightNow.payload.data.alt,
+    //   ],
+    //   zoomLevel: 13,
+    // });
+    cameraViewRef.current?.fitBounds(
+      [locationRightNow.payload.data.lng, locationRightNow.payload.data.alt],
+      coordinateHandphone,
+    );
+    cameraViewRef.current?.zoomTo(11);
+  }, [dispatch, coordinateHandphone]);
 
   const openEditCoordinate = () => {
     setIsAddCoordinate(true);
@@ -104,6 +110,12 @@ const Maps = ({coordinate}: Props) => {
           {/* <Text>1</Text> */}
           {/* <MaterialCommunityIcons name="account" size={30} color="#900" /> */}
           <Mapbox.Callout title="Posisi Tongkat" id="user" />
+        </Mapbox.PointAnnotation>
+        <Mapbox.PointAnnotation id="Handphone" coordinate={coordinateHandphone}>
+          <MaterialCommunityIcons name="account" size={30} color="#D21312" />
+          {/* <Text>1</Text> */}
+          {/* <MaterialCommunityIcons name="account" size={30} color="#900" /> */}
+          <Mapbox.Callout title="Lokasi Saya" id="pelacak" />
         </Mapbox.PointAnnotation>
         {isAddCoordinate ? (
           <Zones zones={pointCoordinate} />

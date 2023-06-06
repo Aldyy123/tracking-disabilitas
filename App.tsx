@@ -5,7 +5,7 @@
  * @format
  */
 
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import messaging from '@react-native-firebase/messaging';
 import {onDisplayNotification} from './src/providers/Notification';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
@@ -38,7 +38,6 @@ const {DarkTheme, LightTheme} = adaptNavigationTheme({
 });
 function App(): JSX.Element {
   const scheme = useColorScheme();
-  const theme = useTheme();
   useEffect(() => {
     const unsubscribe = messaging().onMessage(remoteMessage => {
       console.log('Message handled in the foreground!', remoteMessage);

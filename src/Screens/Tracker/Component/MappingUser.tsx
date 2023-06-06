@@ -43,12 +43,6 @@ function MappingUser({zones, coordinate}: Props) {
 
     const searchWithin = turf.polygon([zonesPolygon]);
     const ptsWithin = turf.pointsWithinPolygon(points, searchWithin);
-    if (ptsWithin.features.length > 0) {
-      console.log('You are in the zone');
-    } else {
-      onMessage();
-      console.log('You are not in the zone');
-    }
     dispatch(setMessage(ptsWithin));
   }, [coordinate, dispatch, zones, token]);
   return (
