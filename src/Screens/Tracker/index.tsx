@@ -49,6 +49,23 @@ function TrackerScreen() {
   };
 
   useEffect(() => {
+    Geolocation.getCurrentPosition(
+      (position: any) => {
+        setInitalCoordinate([
+          position.coords.longitude,
+          position.coords.latitude,
+        ]);
+      },
+      (error: any) => Alert.alert('Error', JSON.stringify(error)),
+      {
+        enableHighAccuracy: true,
+        timeout: 1000,
+        maximumAge: 1000,
+      }
+    );
+  }, []);
+
+  useEffect(() => {
     const watchId = Geolocation.watchPosition(
       position => {
         setHandphoneCoordinate([
@@ -61,7 +78,7 @@ function TrackerScreen() {
       },
       {
         enableHighAccuracy: true,
-        timeout: 5000,
+        timeout: 1000,
         maximumAge: 1000,
       },
     );
