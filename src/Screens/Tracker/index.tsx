@@ -59,9 +59,9 @@ function TrackerScreen() {
       (error: any) => Alert.alert('Error', JSON.stringify(error)),
       {
         enableHighAccuracy: true,
-        timeout: 1000,
+        interval: 1000,
         maximumAge: 1000,
-      }
+      },
     );
   }, []);
 
@@ -78,7 +78,7 @@ function TrackerScreen() {
       },
       {
         enableHighAccuracy: true,
-        timeout: 1000,
+        interval: 2000,
         maximumAge: 1000,
       },
     );

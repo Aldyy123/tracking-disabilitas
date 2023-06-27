@@ -5,7 +5,7 @@
  * @format
  */
 
-import React, {useCallback, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import messaging from '@react-native-firebase/messaging';
 import {onDisplayNotification} from './src/providers/Notification';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
@@ -16,16 +16,11 @@ import {
   DefaultTheme,
   DarkTheme as ReactNavigationDarkTheme,
 } from '@react-navigation/native';
-import SettingsScreen from './src/Screens/SettingsScreen';
-import NotificationScreen from './src/Screens/NotificationScreen';
+// import SettingsScreen from './src/Screens/SettingsScreen';
+// import NotificationScreen from './src/Screens/NotificationScreen';
 import StatusScreen from './src/Screens/StatusScreen/StatusScreen';
 import TrackerScreen from './src/Screens/Tracker';
-import {
-  adaptNavigationTheme,
-  useTheme,
-  MD3DarkTheme,
-  MD3LightTheme,
-} from 'react-native-paper';
+import {adaptNavigationTheme} from 'react-native-paper';
 import {Provider as PaperProvider} from 'react-native-paper';
 import {Provider as ReduxProvider} from 'react-redux';
 import store from './src/config/store';

@@ -6,6 +6,7 @@ import {
   View,
   useWindowDimensions,
   Alert,
+  useColorScheme,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MappingUser from './MappingUser';
@@ -30,6 +31,14 @@ const Maps = ({coordinate, coordinateHandphone}: Props) => {
   const [isAddCoordinate, setIsAddCoordinate] = useState(false);
   const dimensions = useWindowDimensions();
   const dispatch = useAppDispatch();
+  const schema = useColorScheme();
+
+  const [coordinateCalloutDevices, setCoordinateCalloutDevices] = useState<
+    number[] | null
+  >(null);
+  const [coordinateHPUpdate, setCoordinateHPUpdate] = useState<number[] | null>(
+    null,
+  );
 
   useEffect(() => {
     cameraViewRef.current?.setCamera({
@@ -57,7 +66,13 @@ const Maps = ({coordinate, coordinateHandphone}: Props) => {
       coordinateHandphone,
     );
     cameraViewRef.current?.zoomTo(11);
+    setCoordinateCalloutDevices([
+      locationRightNow.payload.data.lng,
+      locationRightNow.payload.data.alt,
+    ]);
+    setCoordinateHPUpdate(coordinateHandphone);
   }, [dispatch, coordinateHandphone]);
+
 
   const openEditCoordinate = () => {
     setIsAddCoordinate(true);
@@ -107,15 +122,57 @@ const Maps = ({coordinate, coordinateHandphone}: Props) => {
         <Mapbox.Camera ref={cameraViewRef} zoomLevel={13} />
         <Mapbox.PointAnnotation id="Penggunaan" coordinate={coordinate}>
           <MaterialCommunityIcons name="map-marker" size={30} color="#D21312" />
-          {/* <Text>1</Text> */}
-          {/* <MaterialCommunityIcons name="account" size={30} color="#900" /> */}
-          <Mapbox.Callout title="Posisi Tongkat" id="user" />
+          <Mapbox.Callout
+            title="Posisi Tongkat"
+            id="user"
+            containerStyle={{
+              backgroundColor: schema === 'dark' ? '#fff' : '#4D455D',
+              width: 300,
+              padding: 10,
+            }}>
+            <Text
+              style={{
+                color: schema === 'dark' ? 'black' : 'white',
+              }}>
+              Lat: {coordinate?.[0]}
+            </Text>
+            <Text
+              style={{
+                color: schema === 'dark' ? 'black' : 'white',
+              }}>
+              Lang: {coordinate?.[1]}
+            </Text>
+          </Mapbox.Callout>
         </Mapbox.PointAnnotation>
         <Mapbox.PointAnnotation id="Handphone" coordinate={coordinateHandphone}>
           <MaterialCommunityIcons name="account" size={30} color="#D21312" />
-          {/* <Text>1</Text> */}
-          {/* <MaterialCommunityIcons name="account" size={30} color="#900" /> */}
-          <Mapbox.Callout title="Lokasi Saya" id="pelacak" />
+          <Mapbox.Callout
+            title="Lokasi Saya"
+            id="pelacak"
+            containerStyle={{
+              backgroundColor: schema === 'dark' ? '#fff' : '#4D455D',
+              width: 300,
+              padding: 10,
+            }}>
+            <Text
+              style={{
+                color: schema === 'dark' ? 'black' : 'white',
+              }}>
+              Lat:
+              {coordinateHPUpdate
+                ? coordinateHPUpdate?.[0]
+                : coordinateHandphone?.[0]}
+            </Text>
+            <Text
+              style={{
+                color: schema === 'dark' ? 'black' : 'white',
+              }}>
+              Lang:
+              {coordinateHPUpdate
+                ? coordinateHPUpdate?.[1]
+                : coordinateHandphone?.[1]}
+            </Text>
+          </Mapbox.Callout>
         </Mapbox.PointAnnotation>
         {isAddCoordinate ? (
           <Zones zones={pointCoordinate} />
